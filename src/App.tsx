@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Canvas from "./components/canvas";
+import ElementsSidebar from "./components/elements-sidebar";
+import type { Element, ElementType } from "./lib/types";
+import { v4 as uuidv4 } from "uuid"; // Make sure to install this: `npm install uuid`
 
-function App() {
+export default function App() {
+  const [elements, setElements] = useState<Element[]>([]);
+  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+
+  const handleAddElement = (type: ElementType, x: number, y: number) => {
+    const newElement: Element = {
+      id: uuidv4(),
+      type,
+      x,
+      y,
+      width: 200,
+      height: 80,
+      content: type === "heading" ? "Heading Text" :
+               type === "paragraph" ? "Paragraph text" :
+               type === "button" ? "Click Me" :
+               "",
+      properties: {},
+    };
+
+    setElements((prev) => [...prev, newElement]);
+  };
+
+  const handleUpdateElement = (id: string, updates: Partial<Element>) => {
+    setElements((prev) =>
+      prev.map((el) => (el.id === id ? { ...el, ...updates } : el))
+    );
+  };
+
+  const handleDeleteElement = (id: string) => {
+    setElements((prev) => prev.filter((el) => el.id !== id));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-layout">
+      <ElementsSidebar onAddElement={handleAddElement} />
+      <Canvas
+        elements={elements}
+        selectedElementId={selectedElementId}
+        viewMode="desktop"
+        onSelectElement={setSelectedElementId}
+        onUpdateElement={handleUpdateElement}
+        onDeleteElement={handleDeleteElement}
+        onAddElement={handleAddElement} // <-- Make sure this is set!
+      />
     </div>
   );
 }
-
-export default App;

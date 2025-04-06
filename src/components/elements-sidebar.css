@@ -1,0 +1,64 @@
+.elements-sidebar-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .sidebar-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .sidebar-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .elements-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .elements-category {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .category-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+  }
+  
+  .draggable-element {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    cursor: grab;
+    margin-bottom: 0.5rem;
+    background-color: #fff;
+    transition: background-color 0.2s;
+  }
+  
+  .draggable-element:hover {
+    background-color: #f8fafc;
+  }
+  
+  .draggable-element.dragging {
+    opacity: 0.5;
+  }
+  
+  .element-icon {
+    color: #64748b;
+  }
+  
