@@ -1,46 +1,100 @@
-# Getting Started with Create React App
+# 🧩 Visual Editor Builder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A drag-and-drop visual editor that allows users to dynamically place and configure UI elements on a canvas. Built with modularity and reusability in mind, it includes support for content editing, styling, and positioning of components like text, buttons, and images.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📁 Project Architecture
 
-### `npm start`
+```
+src/
+├── App.tsx                # Main layout and state manager for selected elements
+├── canvas.tsx             # Drop zone where elements are positioned
+├── elements-sidebar.tsx   # Sidebar with draggable UI elements
+├── draggable-element.tsx  # Wrapper to make elements draggable (missing in your files)
+├── properties-panel.tsx   # Inspector for editing selected element properties
+├── lib/
+│   └── types.ts           # Shared TypeScript types like `Element`, `ElementType`
+└── styles/
+    └── properties-panel.css
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 🛠 Tools & Technologies Used
 
-### `npm test`
+| Tech               | Purpose                              |
+|--------------------|---------------------------------------|
+| **React**          | Core framework for building the UI    |
+| **TypeScript**     | Type safety and clarity                |
+| **react-dnd**      | Drag and drop logic                   |
+| **lucide-react**   | Icon set used in the sidebar/panel    |
+| **CSS Modules**    | Scoped and modular styling            |
+| **Vite** (assumed) | For fast local development (optional) |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🧠 Key Design Rationale
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 1. **Modularity First**
+Each UI region is built as a focused component:
+- `ElementsSidebar` for adding elements
+- `Canvas` as the layout playground
+- `PropertiesPanel` to inspect and edit
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This allows for independent testing and scaling of each component.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. **Dynamic Drag and Drop**
+The drag and drop flow uses `react-dnd`:
 
-### `npm run eject`
+- Elements in `ElementsSidebar` use `useDrag()`
+- The `Canvas` listens via `useDrop()` and calls `onAddElement`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This lets you drop multiple instances, each independently tracked.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 3. **Live Editing**
+Each element's content and styles can be modified in real time via the `PropertiesPanel`. Tabs provide a clean way to group features:
+- **Content** (text or images)
+- **Style** (font size, color, background)
+- **Advanced** (positioning and size)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 4. **Separation of Concerns**
+- All data modeling is handled via a central `Element` type.
+- Layout logic is abstracted into the `canvas`.
+- UI rendering is separate from logic (e.g., icons, dropdowns, etc.).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 5. **Scalability in Mind**
+The setup allows:
+- Adding new element types (e.g., video, form) with minimal changes.
+- Extending the property panel to include behaviors or animations.
+- Saving/restoring layouts via JSON (future-ready).
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 😞 Known Issues or To-Do
+- `draggable-element.tsx` is missing (used by `ElementsSidebar`) – should contain the logic wrapping icons for dragging.
+- Some icon imports like `Paragraph` may be incorrect/missing from `lucide-react`.
+- Error: `Expected drag drop context` – make sure your app is wrapped in `<DndProvider>` at root level with `HTML5Backend`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+## 🚀 Getting Started
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start development server:
+```bash
+npm run dev
+```
+
+3. Ensure your root entry (`main.tsx`) wraps `<App />` like this:
+
+```tsx
+<DndProvider backend={HTML5Backend}>
+  <App />
+</DndProvider>
+```
+
